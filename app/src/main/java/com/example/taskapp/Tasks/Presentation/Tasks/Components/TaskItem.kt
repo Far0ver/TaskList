@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
@@ -23,12 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.taskapp.Tasks.Domain.Model.Task
+import com.example.taskapp.Tasks.Presentation.AddEditTask.AddEditTaskViewModel
+import kotlinx.coroutines.launch
+
+var taskCheck = false;
 
 @Composable
 fun TaskItem(
     task: Task,
     modifier: Modifier = Modifier,
+    viewModel: AddEditTaskViewModel = hiltViewModel(),
     onDeleteClick: () -> Unit,
    /* onStarClick: () -> Unit*/
     ) {
@@ -80,13 +88,24 @@ fun TaskItem(
                     tint = Color.Black
                 )
             }
+
 */
-            val checked = remember { mutableStateOf(false) }
-            IconToggleButton(checked = checked.value, onCheckedChange = { checked.value = it }) {
+
+            val checked = remember { mutableStateOf(task.Favorites) }
+            IconToggleButton(
+
+                checked = checked.value,
+                modifier = Modifier.align(Alignment.TopEnd),
+                onCheckedChange = {
+                    checked.value = it;
+                    taskCheck = it;
+
+                }
+            ) {
                 Icon(
-                    Icons.Filled.Info,
-                    contentDescription = "Информация о приложении",
-                    tint = if (checked.value) Color(0xFFEC407A) else Color(0xFFB0BEC5)
+                    Icons.Filled.Star,
+                    contentDescription = "Избранное",
+                    tint = if (checked.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
                 )
             }
 
