@@ -1,5 +1,7 @@
 package com.example.taskapp.Tasks.Presentation.AddEditTask
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -12,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -79,8 +82,11 @@ class AddEditTaskViewModel @Inject constructor(
                             _taskContent.value.text.isBlank()
                 )
             }
+
+
             is AddEditTaskEvent.SaveTask -> {
                 viewModelScope.launch{
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     try{
                         taskUseCases.addTask(
                             Task(
