@@ -64,6 +64,7 @@ fun TasksScreen (
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    taskCheck = false;
                     navController.navigate(Screen.AddEditTaskScreen.route)
                 },
                 backgroundColor = MaterialTheme.colorScheme.primaryContainer

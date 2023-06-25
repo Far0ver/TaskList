@@ -26,13 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.taskapp.Tasks.Domain.Model.Task
 import com.example.taskapp.Tasks.Presentation.AddEditTask.Components.TransparentHintTextField
 import com.example.taskapp.Tasks.Presentation.Tasks.Components.taskCheck
 import kotlinx.coroutines.flow.collectLatest
-import com.example.taskapp.Tasks.Presentation.Tasks.TasksScreen
 
-var taskF = false;
 
 @Composable
 fun AddEditTaskScreen(
@@ -42,10 +39,7 @@ fun AddEditTaskScreen(
     val titleState = viewModel.taskTitle.value
     val contentState = viewModel.taskContent.value
 
-
     val scaffoldState = rememberScaffoldState()
-
-
 
     LaunchedEffect(key1 = true){
         viewModel.eventFlow.collectLatest { event ->
@@ -85,25 +79,6 @@ fun AddEditTaskScreen(
                 .padding(16.dp)
                 .padding(paddingValues = it)
         ){
-
-            }
-
-           /* IconToggleButton(
-
-                checked = checked.value,
-
-                onCheckedChange = {
-                    checked.value = it;
-                    taskF = checked.value
-
-                }
-            ) {
-                Icon(
-                    Icons.Filled.Star,
-                    contentDescription = "Избранное",
-                    tint = if (checked.value) Color(0xFFEC407A) else Color(0xFFB0BEC5)
-                )
-            }*/
             TransparentHintTextField(
                 text = titleState.text,
 
@@ -136,5 +111,5 @@ fun AddEditTaskScreen(
 
 
     }
-
+}
 

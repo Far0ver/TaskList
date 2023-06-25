@@ -10,5 +10,4 @@ sealed class AddEditTaskEvent {
 
 
     object SaveTask: AddEditTaskEvent()
-    object FavoritesAdd: AddEditTaskEvent()
 }

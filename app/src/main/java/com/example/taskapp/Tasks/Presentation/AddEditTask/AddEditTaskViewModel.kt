@@ -15,7 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
@@ -96,7 +96,7 @@ class AddEditTaskViewModel @Inject constructor(
                             Task(
                                 Title = taskTitle.value.text,
                                 Desc = taskContent.value.text,
-                                Time = System.currentTimeMillis(),
+                                Time = LocalDateTime.now(ZoneOffset.ofHours(10)).format(formatter),
                                 Favorites = taskCheck,
                                 id = currentTaskId
                             )
@@ -112,40 +112,6 @@ class AddEditTaskViewModel @Inject constructor(
                 }
             }
 
-            is AddEditTaskEvent.FavoritesAdd -> {
-                viewModelScope.launch{
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                    try{
-                        taskUseCases.addTask(
-                            if (true) {
-                                Task(
-                                    Title = taskTitle.value.text,
-                                    Desc = taskContent.value.text,
-                                    Time = System.currentTimeMillis(),
-                                    Favorites = false,
-                                    id = currentTaskId
-                                )
-                            }
-                            else {
-                                Task(
-                                    Title = taskTitle.value.text,
-                                    Desc = taskContent.value.text,
-                                    Time = System.currentTimeMillis(),
-                                    Favorites = true,
-                                    id = currentTaskId
-                                )
-                            }
-                        )
-                        _eventFlow.emit(UiEvent.SaveTask)
-                    } catch(e: InvalidTaskException){
-                        _eventFlow.emit(
-                            UiEvent.ShowSnackBar(
-                                message = e.message?: "Невозможно добавить в избранное"
-                            )
-                        )
-                    }
-                }
-            }
         }
     }
 

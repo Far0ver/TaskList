@@ -71,7 +71,7 @@ fun TaskItem(
 
                 Text(
 
-                    text = updTime(task.Time/1000),
+                    text = task.Time,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     maxLines = 1,
