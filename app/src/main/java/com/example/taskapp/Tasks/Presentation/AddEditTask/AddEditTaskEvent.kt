@@ -7,5 +7,7 @@ sealed class AddEditTaskEvent {
     data class ChangeTitleFocus(val focusState: FocusState): AddEditTaskEvent()
     data class EnteredContent(val value: String): AddEditTaskEvent()
     data class ChangeContentFocus(val focusState: FocusState): AddEditTaskEvent()
+
+
     object SaveTask: AddEditTaskEvent()
 }

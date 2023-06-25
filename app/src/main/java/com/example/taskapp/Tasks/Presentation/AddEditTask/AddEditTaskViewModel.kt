@@ -1,5 +1,7 @@
 package com.example.taskapp.Tasks.Presentation.AddEditTask
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -8,10 +10,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.taskapp.Tasks.Domain.Model.InvalidTaskException
 import com.example.taskapp.Tasks.Domain.Model.Task
 import com.example.taskapp.Tasks.Domain.UseCase.TaskUseCases
+import com.example.taskapp.Tasks.Presentation.Tasks.Components.taskCheck
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,12 +39,15 @@ class AddEditTaskViewModel @Inject constructor(
 
     private var currentTaskId: Int? = null
 
+    var taskFar: Boolean = false
+
     init{
         savedStateHandle.get<Int>("taskId")?.let{taskId->
             if(taskId != -1){
                 viewModelScope.launch{
                     taskUseCases.getTask(taskId)?.also{ task ->
                         currentTaskId = task.id
+                        taskFar = task.Favorites
                         _taskTitle.value = taskTitle.value.copy(
                             text = task.Title,
                             isHintVisible = false
@@ -79,14 +86,18 @@ class AddEditTaskViewModel @Inject constructor(
                             _taskContent.value.text.isBlank()
                 )
             }
+
+
             is AddEditTaskEvent.SaveTask -> {
                 viewModelScope.launch{
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
                     try{
                         taskUseCases.addTask(
                             Task(
                                 Title = taskTitle.value.text,
                                 Desc = taskContent.value.text,
-                                Time = System.currentTimeMillis(),
+                                Time = LocalDateTime.now(ZoneOffset.ofHours(10)).format(formatter),
+                                Favorites = taskCheck,
                                 id = currentTaskId
                             )
                         )
@@ -100,6 +111,7 @@ class AddEditTaskViewModel @Inject constructor(
                     }
                 }
             }
+
         }
     }
 

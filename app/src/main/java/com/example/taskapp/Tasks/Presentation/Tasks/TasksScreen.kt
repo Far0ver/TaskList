@@ -2,6 +2,7 @@ package com.example.taskapp.Tasks.Presentation.Tasks
 
 
 import android.content.res.Configuration
+import android.text.Layout
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,7 +33,11 @@ import androidx.navigation.NavController
 
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
@@ -40,8 +45,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.taskapp.Tasks.Presentation.Tasks.Components.OrderSection
 import com.example.taskapp.Tasks.Presentation.Tasks.Components.TaskItem
+import com.example.taskapp.Tasks.Presentation.Tasks.Components.taskCheck
 import com.example.taskapp.Tasks.Presentation.Utility.Screen
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun TasksScreen (
@@ -52,10 +59,12 @@ fun TasksScreen (
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    taskCheck = false;
                     navController.navigate(Screen.AddEditTaskScreen.route)
                 },
                 backgroundColor = MaterialTheme.colorScheme.primaryContainer
@@ -109,6 +118,9 @@ fun TasksScreen (
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
+
+
+
             LazyColumn(modifier = Modifier.fillMaxSize()){
                 items(state.tasks){ task ->
                     TaskItem(
